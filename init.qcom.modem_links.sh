@@ -40,6 +40,19 @@ if [ ! -f /system/etc/boot_fixup ];then
   mount_needed=true;
 fi
 
+# TODO start: Figure out if this is still relevant
+cd /system/etc/firmware
+case `ls dsps.flist 2>/dev/null` in
+    dsps.flist)
+        # This file only exists when modem is in deb
+        ln -s /system/etc/firmware /firmware/image
+        break;;
+    *)
+        mount -t vfat /dev/block/platform/msm_sdcc.1/by-name/modem /firmware
+        break;;
+esac
+# TODO end: Figure out if this is still relevant
+
 # Check for images and set up symlinks
 cd /firmware/image
 
@@ -194,4 +207,3 @@ if $mount_needed ;then
 fi
 
 cd /
-
